@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GoRent.Api\GoRent.Api.csproj" />
+      <ProjectReference Include="..\GoRent.Application\GoRent.Application.csproj" />
+      <ProjectReference Include="..\GoRent.Domain\GoRent.Domain.csproj" />
+      <ProjectReference Include="..\GoRent.Infrastructure\GoRent.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
