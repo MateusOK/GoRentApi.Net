@@ -1,0 +1,46 @@
+name: CI - Build, testes e análise com SonarQube
+
+on:
+  push:
+    branches: [main]
+  pull_request: 
+    branches: [main]
+    
+jobs:
+  build-and-analyze:
+    name: Build e Análise SonarQube
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: '0'
+      
+      - name: Instalar .NET SDK
+        uses: actions/setup-dotnet@v3
+        with: 
+          dotnet-version: '8.0.x'
+          
+      - name: Restaurar dependências
+        run: dotnet restore
+        
+      - name: Build da aplicação
+        run: dotnet build --no-restore --configuration Release
+        
+      - name: Executar testes com cobertura
+        run: |
+          dotnet test --no-build --configuration Release \
+          /p:CollectCoverage=true \
+          /p:CoverletOutputFormat=opencover \
+          /p:CoverletOutput=./TestResults/coverage.opencover.xml
+      
+      - name: Análise com SonarQube
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: > 
+            -Dsonar.projectKey=MateusOK_GoRentApi.Net
+            -Dsonar.organization=mateusok
+            -Dsonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
