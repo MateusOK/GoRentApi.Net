@@ -34,6 +34,22 @@ jobs:
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=opencover \
           /p:CoverletOutput=./TestResults/coverage.opencover.xml
+          
+      - name: Instalar ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Gerar relatório de cobertura em HTML
+        run: |
+          ~/.dotnet/tools/reportgenerator \
+          -reports:TestResults/coverage.opencover.xml \
+          -targetdir:coverage-report \
+          -reporttypes:Html
+
+      - name: Upload do relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-de-testes
+          path: coverage-report
       
       - name: Análise com SonarQube
         uses: SonarSource/sonarqube-scan-action@v5.0.0
