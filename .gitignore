@@ -1,0 +1,11 @@
+#Ignore a pasta .idea (Rider)
+.idea/
+
+#ignorar arquivos binários e temporários do .NET
+**/bin/
+**/obj/
+
+#Ignorar arquivos de build e relatórios
+GoRent.Tests/TestResults/
+GoRent.Tests/coverage-report/
+
