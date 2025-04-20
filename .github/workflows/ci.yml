@@ -41,7 +41,7 @@ jobs:
       - name: Gerar relatório de cobertura em HTML
         run: |
           ~/.dotnet/tools/reportgenerator \
-          -reports:TestResults/coverage.opencover.xml \
+          -reports:**/coverage.opencover.xml \
           -targetdir:coverage-report \
           -reporttypes:Html
 
