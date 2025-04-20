@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\GoRent.Tests.props" />
+</Project>
