@@ -61,3 +61,4 @@ jobs:
             -Dsonar.projectKey=MateusOK_GoRentApi.Net
             -Dsonar.organization=mateusok
             -Dsonar.cs.cobertura.reportsPaths=**/coverage.cobertura.xml
+            -Dsonar.exclusions=coverage-report/**/*
