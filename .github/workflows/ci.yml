@@ -3,61 +3,61 @@ name: CI - Build, testes e análise com SonarQube
 on:
   push:
     branches: [main]
-  pull_request: 
+  pull_request:
     branches: [main]
-    
+
 jobs:
   build-and-analyze:
     name: Build e Análise SonarQube
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-        with: 
+        with:
           fetch-depth: '0'
-      
+
       - name: Instalar .NET SDK
         uses: actions/setup-dotnet@v3
-        with: 
+        with:
           dotnet-version: '8.0.x'
-          
+
       - name: Restaurar dependências
         run: dotnet restore
-        
+
       - name: Build da aplicação
         run: dotnet build --no-restore --configuration Release
-        
+
       - name: Executar testes com cobertura
         run: |
           dotnet test --no-build --configuration Release \
-          /p:CollectCoverage=true \
-          /p:CoverletOutputFormat=opencover \
-          /p:CoverletOutput=TestResults/coverage.opencover.xml \
-          /p:UseSourceLink=true
-          
+            --collect:"XPlat Code Coverage"
+
       - name: Instalar ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
 
       - name: Gerar relatório de cobertura em HTML
         run: |
+          COVERAGE_PATH=$(find . -type f -name 'coverage.cobertura.xml' | head -n 1)
+          echo "Relatório encontrado em: $COVERAGE_PATH"
+
           ~/.dotnet/tools/reportgenerator \
-          -reports:**/coverage.opencover.xml \
-          -targetdir:coverage-report \
-          -reporttypes:Html
+            -reports:$COVERAGE_PATH \
+            -targetdir:coverage-report \
+            -reporttypes:Html
 
       - name: Upload do relatório de cobertura
         uses: actions/upload-artifact@v4
         with:
           name: cobertura-de-testes
           path: coverage-report
-      
+
       - name: Análise com SonarQube
         uses: SonarSource/sonarqube-scan-action@v5.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          args: > 
+          args: >
             -Dsonar.projectKey=MateusOK_GoRentApi.Net
             -Dsonar.organization=mateusok
-            -Dsonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
+            -Dsonar.cs.cobertura.reportsPaths=**/coverage.cobertura.xml
