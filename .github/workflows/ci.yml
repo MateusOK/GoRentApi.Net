@@ -33,7 +33,8 @@ jobs:
           dotnet test --no-build --configuration Release \
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=opencover \
-          /p:CoverletOutput=./TestResults/coverage.opencover.xml
+          /p:CoverletOutput=TestResults/coverage.opencover.xml \
+          /p:UseSourceLink=true
           
       - name: Instalar ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
