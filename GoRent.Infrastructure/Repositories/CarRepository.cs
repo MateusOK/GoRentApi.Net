@@ -1,32 +1,39 @@
 using GoRent.Domain.Entities;
 using GoRent.Domain.Repositories;
+using GoRent.Infrastructure.Database;
+using MongoDB.Driver;
 
 namespace GoRent.Infrastructure.Repositories;
 
-public class CarRepository : ICarRepository
+public class CarRepository(MongoDbContext context) : ICarRepository
 {
-    public Task<Car?> GetByIdAsync(Guid id)
+    
+    private readonly IMongoCollection<Car> _cars = context.Cars;
+
+    public async Task<Car?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _cars.Find(c => c.Id == id).FirstOrDefaultAsync();
     }
 
-    public Task<IEnumerable<Car>> GetAllAsync()
+    public async Task<List<Car>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _cars.Find(_ => true).ToListAsync();
     }
 
-    public Task AddAsync(Car car)
+    public async Task AddAsync(Car car)
     {
-        throw new NotImplementedException();
+        await _cars.InsertOneAsync(car);
     }
 
-    public Task UpdateAsync(Car car)
+    public async Task UpdateAsync(Car car)
     {
-        throw new NotImplementedException();
+        var filter = Builders<Car>.Filter.Eq(c => c.Id, car.Id);
+        await _cars.ReplaceOneAsync(filter, car);
     }
 
-    public Task DeleteAsync(Car car)
+    public async Task DeleteAsync(Car car)
     {
-        throw new NotImplementedException();
+        var filter = Builders<Car>.Filter.Eq(c => c.Id, car.Id);
+        await _cars.DeleteOneAsync(filter);
     }
 }
