@@ -5,10 +5,10 @@ using MongoDB.Driver;
 
 namespace GoRent.Infrastructure.Repositories;
 
-public class CarRepository(MongoDbContext context) : ICarRepository
+public class CarRepository(IMongoDatabase database) : ICarRepository
 {
     
-    private readonly IMongoCollection<Car> _cars = context.Cars;
+    private readonly IMongoCollection<Car> _cars = database.GetCollection<Car>("cars");
 
     public async Task<Car?> GetByIdAsync(Guid id)
     {
