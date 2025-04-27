@@ -10,4 +10,4 @@ GoRent.Tests/TestResults/
 GoRent.Tests/coverage-report/
 
 #Ignorar credenciais de desenvolvimento
-**/appsettings.Development.json
+GoRent.Infrastructure/appsettings.Development.json
