@@ -1,5 +1,6 @@
 using GoRent.Domain.Repositories;
 using GoRent.Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GoRent.Infrastructure.Ioc.DependencyInjection;
 
