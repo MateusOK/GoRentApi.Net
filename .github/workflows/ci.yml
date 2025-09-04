@@ -53,7 +53,7 @@ jobs:
           path: coverage-report
 
       - name: Análise com SonarQube
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        uses: SonarSource/sonarqube-scan-action@v5.3.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
